@@ -1,6 +1,6 @@
 // se encargara de manejar todso los estados
 
-import { bcryptAdapter } from "../../config";
+import { JwtAdapter, bcryptAdapter } from "../../config";
 import { ueserModel } from "../../data";
 import {
   CustomError,
@@ -10,6 +10,7 @@ import {
 } from "../../domain";
 
 export class AuthService {
+
   constructor() {}
 
   private async userExist(email: string) {
@@ -17,6 +18,7 @@ export class AuthService {
     if (!existUser) throw CustomError.badRequest("Email not exist");
     return UserEntity.fromObject(existUser!);
   }
+
   public async registerUser(registerUser: RegisterUserDto) {
     await this.userExist(registerUser.email);
     const existUser = await ueserModel.findOne({ email: registerUser.email });
@@ -37,6 +39,7 @@ export class AuthService {
       throw CustomError.internalServer(`${error}`);
     }
   }
+
   public async LoginUser(loginUserDto: LoginUserDto) {
     //si existe
     const existUser = await this.userExist(loginUserDto.email);
@@ -48,8 +51,12 @@ export class AuthService {
     if (!isEqualPassword) throw CustomError.unautorized(`password not mach`);
     //retornar
     const { password, ...rest } = existUser;
+    const token=await JwtAdapter.generateToken({id:rest.id,name:rest.name,});
+
+    if(!token) throw CustomError.internalServer('Erro to generate  token')
     return {
       user: { ...rest },
+      token
     };
   }
 }
