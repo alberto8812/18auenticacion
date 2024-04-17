@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { CustomError, RegisterUserDto } from "../../domain";
+import { CustomError, LoginUserDto, RegisterUserDto } from "../../domain";
 import { AuthService } from "../service/auth.service";
 
 //clase que permite hacer inyeccion de dependencias
@@ -22,7 +22,11 @@ export class AuthController {
     .catch(error=>this.handleError(error,res))
   };
   loginUser = (req: Request, res: Response) => {
-    res.json("register loginUser");
+   const [error,loginUserDto]=LoginUserDto.Login(req.body);
+   if(error)  return res.status(400).json({error});
+   this.authService.LoginUser(loginUserDto!)
+    .then(user=>res.json(user))
+    .catch(error=>this.handleError(error,res))
   };
   validateEmail = (req: Request, res: Response) => {
     res.json("register validateEmail");
