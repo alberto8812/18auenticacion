@@ -1,19 +1,30 @@
 import { Request, Response } from "express";
+import { CustomError, RegisterUserDto } from "../../domain";
+import { AuthService } from "../service/auth.service";
 
 //clase que permite hacer inyeccion de dependencias
 export class AuthController {
-    constructor(){
+  constructor(
+    public readonly authService:AuthService
+  ) {}
 
+  private handleError=(error:unknown,res:Response)=>{
+    if(error instanceof CustomError){
+      return res.status(error.statusCade).json({error:error.message})
     }
+  }
 
-
-    regisger=(req:Request,res:Response)=>{
-        res.json('register user')
-    }
-    loginUser=(req:Request,res:Response)=>{
-        res.json('register loginUser')
-    }
-    validateEmail=(req:Request,res:Response)=>{
-        res.json('register validateEmail')
-    }
+  register = (req: Request, res: Response) => {
+    const [error, registerUserDto] = RegisterUserDto.create(req.body);
+    if (error) return res.status(400).json({error});
+    this.authService.registerUser(registerUserDto!)
+    .then(user=>res.json(user))
+    .catch(error=>this.handleError(error,res))
+  };
+  loginUser = (req: Request, res: Response) => {
+    res.json("register loginUser");
+  };
+  validateEmail = (req: Request, res: Response) => {
+    res.json("register validateEmail");
+  };
 }
