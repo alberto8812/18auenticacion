@@ -1,5 +1,6 @@
 // se encargara de manejar todso los estados
 
+import { bcryptAdapter } from "../../config";
 import { ueserModel } from "../../data";
 import { CustomError, RegisterUserDto, UserEntity } from "../../domain";
 
@@ -11,9 +12,9 @@ export class AuthService {
     if (existUser) throw CustomError.badRequest("Email already exist");
     try {
         const user= new ueserModel(registerUser);//
-        await user.save();
         //encriptar la contrasena
-
+        user.password=bcryptAdapter.hash(registerUser.password);
+        await user.save();
         // jwt<-- para mantener la autencacion del usuario
         
         // Email confirmacion
