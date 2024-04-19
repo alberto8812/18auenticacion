@@ -5,7 +5,7 @@ import { AuthService } from "../service/auth.service";
 //clase que permite hacer inyeccion de dependencias
 export class AuthController {
   constructor(
-    public readonly authService:AuthService
+    public readonly authService:AuthService,
   ) {}
 
   private handleError=(error:unknown,res:Response)=>{
