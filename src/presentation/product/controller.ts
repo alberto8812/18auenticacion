@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { CustomError } from "../../domain";
 import { PaginationDto } from "../../domain/dtos/shared/pagination.dto";
+import { CreateProductDto } from '../../domain/dtos/product/create-product.dto';
 
 export class ProductController {
   constructor() {}
@@ -15,6 +16,9 @@ export class ProductController {
   };
 
   createProduct = (req: Request, res: Response) => {
+    const [error,createProductDto]=CreateProductDto.create(req.body);
+    if(error) return res.status(400).json({error});
+    
     res.json('create product')
   };
   getProduct = (req: Request, res: Response) => {
@@ -23,3 +27,4 @@ export class ProductController {
     res.json(' get products')
   };
 }
+
