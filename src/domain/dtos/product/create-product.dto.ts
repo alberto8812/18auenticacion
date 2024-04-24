@@ -1,11 +1,11 @@
 export class CreateProductDto {
   constructor(
-    private readonly name: string,
-    private readonly available: boolean,
-    private readonly price: number,
-    private readonly description: string,
-    private readonly user: string,
-    private readonly category: string
+    public readonly name: string,
+    public readonly available: boolean,
+    public readonly price: number,
+    public readonly description: string,
+    public readonly user: string,
+    public readonly category: string
   ) {}
 
   static create(object: { [key: string]: any }): [string?, CreateProductDto?] {
