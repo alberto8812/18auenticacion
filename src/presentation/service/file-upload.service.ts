@@ -23,7 +23,7 @@ export class FileUploadservice {
     try {
 
       const fileExtension = file.mimetype.split("/").at(1) ?? '';
-      if(!validExtensions?.includes(fileExtension)){
+      if(!validExtensions.includes(fileExtension)){
         throw CustomError.badRequest(`Invalid Extension:${fileExtension}`)
       }
       const destinatiion = path.resolve(__dirname, "../../../", folder); //'_dirname la posicion en la que estamos
