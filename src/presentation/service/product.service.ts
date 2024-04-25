@@ -31,7 +31,9 @@ export class ProductService {
         productModel
           .find()
           .skip((page - 1) * limit)
-          .limit(limit),
+          .limit(limit)
+          .populate('user')
+          .populate('category')
       ]);
       // const total=await CategoryModel.countDocuments();
       // const categories= await CategoryModel.find()
