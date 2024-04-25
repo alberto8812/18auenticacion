@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { FileUploadController } from "./controller";
+import { FileUploadservice } from "../service/file-upload.service";
 
 
 
@@ -7,10 +8,11 @@ export class FileUploadRoutes {
 
     static get routes():Router{
         const router=Router();
-        const fileUploadController=new FileUploadController()
+        const fileUploadservice=new FileUploadservice()
+        const fileUploadController=new FileUploadController(fileUploadservice)
 
-        router.get('/single/:type',fileUploadController.uploadFile)
-        router.get('/multiple/:type',fileUploadController.uploadMultipleFile)
+        router.post('/single/:type',fileUploadController.uploadFile)
+        router.post('/multiple/:type',fileUploadController.uploadMultipleFile)
 
         return router;
     }
